@@ -1,9 +1,15 @@
+PROJECT=$(gcloud config get-value project)
+ZONE=$(gcloud config get-value compute/zone)
+
 gcloud container clusters create gke-audit \
-    --service-account=cluster-service-account@$(gcloud config get-value project).iam.gserviceaccount.com \
+    --service-account=cluster-service-account@${PROJECT}.iam.gserviceaccount.com \
     --no-enable-cloud-logging \
-    --scopes=logging-write,monitoring \
-    --tags=gke-cluster-with-customized-fluentd
+    --tags=gke-audit
+
+kubectl config use-context gke_${PROJECT}_${ZONE}_gke-audit
 
 kubectl apply -f kubernetes/fluentd-configmap-audit.yaml
 
 kubectl apply -f kubernetes/fluentd-daemonset-audit.yaml
+
+kubectl apply -f kubernetes/test-logger.yaml
