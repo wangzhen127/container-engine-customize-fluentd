@@ -334,6 +334,13 @@ data:
       read_from_head true
       tag audit
     </source>
+
+    <source>
+      @type systemd
+      pos_file /var/log/gcp-journald.pos
+      read_from_head true
+      tag gce_linux_systemd
+    </source>
   monitoring.conf: |-
     # Prometheus monitoring
     <source>
