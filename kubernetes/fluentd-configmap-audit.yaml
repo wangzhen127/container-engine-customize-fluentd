@@ -327,9 +327,6 @@ data:
       tag kubelet
     </source>
 
-    # BEGIN_GKE_NODE_JOURNAL
-    # Whether to include gke-node-journal or not is determined when starting the
-    # cluster. It is not changed when the cluster is already running.
     <source>
       @type systemd
       pos_file /var/log/gcp-journald.pos
@@ -341,10 +338,9 @@ data:
       @type grep
       <exclude>
         key _SYSTEMD_UNIT
-        pattern ^(docker|kubelet)\.service$
+        pattern ^(kubelet|docker|node-problem-detector)\.service$
       </exclude>
     </filter>
-    # END_GKE_NODE_JOURNAL
   monitoring.conf: |-
     # Prometheus monitoring
     <source>
