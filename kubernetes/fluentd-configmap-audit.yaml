@@ -327,20 +327,24 @@ data:
       tag kubelet
     </source>
 
-    <source>
-      type systemd
-      filters [{ "SYSLOG_IDENTIFIER": "audit" }]
-      pos_file /var/log/gcp-journald-audit.pos
-      read_from_head true
-      tag audit
-    </source>
-
+    # BEGIN_GKE_NODE_JOURNAL
+    # Whether to include gke-node-journal or not is determined when starting the
+    # cluster. It is not changed when the cluster is already running.
     <source>
       @type systemd
       pos_file /var/log/gcp-journald.pos
       read_from_head true
-      tag gce_linux_systemd
+      tag gke-node-journal
     </source>
+
+    <filter gke-node-journal>
+      @type grep
+      <exclude>
+        key _SYSTEMD_UNIT
+        pattern ^(docker|kubelet)\.service$
+      </exclude>
+    </filter>
+    # END_GKE_NODE_JOURNAL
   monitoring.conf: |-
     # Prometheus monitoring
     <source>
