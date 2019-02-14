@@ -328,19 +328,12 @@ data:
     </source>
 
     <source>
-      @type systemd
-      pos_file /var/log/gcp-journald.pos
+      type systemd
+      filters [{ "SYSLOG_IDENTIFIER": "audit" }]
+      pos_file /var/log/gcp-journald-audit.pos
       read_from_head true
-      tag gke-node-journal
+      tag audit
     </source>
-
-    <filter gke-node-journal>
-      @type grep
-      <exclude>
-        key _SYSTEMD_UNIT
-        pattern ^(kubelet|docker|node-problem-detector)\.service$
-      </exclude>
-    </filter>
   monitoring.conf: |-
     # Prometheus monitoring
     <source>
